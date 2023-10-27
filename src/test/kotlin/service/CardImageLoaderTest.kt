@@ -1,7 +1,5 @@
 package service
 
-import entity.CardSuit
-import entity.CardValue
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import kotlin.test.*
@@ -60,7 +58,7 @@ class CardImageLoaderTest {
      */
     @Test
     fun testCardEquality() {
-        val testImage = imageLoader.frontImageFor(CardSuit.HEARTS, CardValue.QUEEN)
+        val testImage = imageLoader.frontImageFor(CardSuit.HEART, CardValue.QUEEN)
         assertTrue (testImage sameAs queenOfHearts)
     }
 
@@ -69,7 +67,7 @@ class CardImageLoaderTest {
      */
     @Test
     fun testCardUnequality() {
-        val testImage = imageLoader.frontImageFor(CardSuit.SPADES, CardValue.ACE)
+        val testImage = imageLoader.frontImageFor(CardSuit.SPADE, CardValue.ACE)
         assertFalse(testImage sameAs queenOfHearts)
     }
 
