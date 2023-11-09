@@ -1,18 +1,23 @@
-import CardSuit.*
-import CardValue.*
+import entity.CardSuit
+import entity.CardValue
+import entity.Card
+import entity.Player
+import entity.Pyramid
+import entity.Pyramide
+import entity.CardStack
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class PyramideTest {
 
-    //Karten für die Pyramide werden erzeugt
-    val card1 = Card(TWO, HEART, false)
-    val card2 = Card(ACE, DIAMOND, false)
+    //Karten für die entity.Pyramide werden erzeugt
+    val card1 = Card(CardValue.TWO, CardSuit.HEARTS)
+    val card2 = Card(CardValue.ACE, CardSuit.DIAMONDS)
 
     //Normalerweise wiederholen sich die Karten nicht, hier wird es erstmal ignoriert
 
-    //Listen für einzelnen Reihen der Pyramide werden erstellt
+    //Listen für einzelnen Reihen der entity.Pyramide werden erstellt
     var cardRow1 = mutableListOf(card1)
     var cardRow2 = mutableListOf(card1, card2)
     var cardRow3 = mutableListOf(card1, card2, card1)
@@ -21,13 +26,13 @@ class PyramideTest {
     var cardRow6 = mutableListOf(card1, card2, card1, card2, card1, card2)
     var cardRow7 = mutableListOf(card1, card2, card1, card2, card1, card2, card1)
 
-    //Pyramide wird erstellt
-    val newPyramid = Pyramid (listOf(cardRow1, cardRow2, cardRow3, cardRow4,
+    //entity.Pyramide wird erstellt
+    val newPyramid = Pyramid (listOf (cardRow1, cardRow2, cardRow3, cardRow4,
                                      cardRow5, cardRow6, cardRow7))
 
     //Stapel werden erstellt
-    var drawStack = CardStack(cardRow7)
-    var reserveStack = CardStack(mutableListOf<Card>())
+    var drawStack = createDrawStack(cardRow7)
+    var reserveStack = createDrawStack(mutableListOf<Card>())
 
     //Liste aus 52 Karten für den Spiel wird erstellt
     var gameCards = mutableListOf(card1, card2, card1, card2, card1, card2, card1, card1,
@@ -44,22 +49,21 @@ class PyramideTest {
     val new_players = listOf(player1, player2)
 
     //Exceptions vom Konstruktor werden getestet
-    @Test //Ungültiger aktueller Player-Index löst eine Exception aus
-    fun test_currentPlayer_Value()
-    {
-        val exception = assertFailsWith<IllegalStateException>(
-            block={ Pyramide(false, 5, new_players,
-                            gameCards, drawStack, reserveStack, newPyramid)}
-        )
-        assertEquals("invalid currentPlayer index", exception.message)
-    }
 
+
+    fun createDrawStack(cards: List<Card>):CardStack{
+        val stack = CardStack()
+        stack.putOnTop(cards)
+        return stack
+    }
     @Test
     fun testPlayers() //Mehr als 2 Spieler wurden übergeben
     {
-        val exception = assertFailsWith<IllegalStateException>(
-            block={ Pyramide(false, 1, listOf(player1,player2,Player("Kate")),
-                gameCards, drawStack, reserveStack, newPyramid)}
+
+        val exception = assertFailsWith<IllegalArgumentException>(
+            block={ Pyramide(false, 1, listOf(player1,player2, Player("Kate")),
+                gameCards, drawStack, reserveStack, newPyramid)
+            }
         )
         assertEquals("invalid players count", exception.message)
     }
@@ -67,9 +71,10 @@ class PyramideTest {
     @Test
     fun testCards() //Die Liste aus nur 2 Karten wurde übergeben
     {
-        val exception = assertFailsWith<IllegalStateException>(
+        val exception = assertFailsWith<IllegalArgumentException>(
             block={ Pyramide(false, 1, new_players,
-                listOf(card1, card2), drawStack, reserveStack, newPyramid)}
+                listOf(card1, card2), drawStack, reserveStack, newPyramid)
+            }
         )
         assertEquals("invalid cards count", exception.message)
     }

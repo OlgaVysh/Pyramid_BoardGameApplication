@@ -1,7 +1,7 @@
 package service
 
-import CardSuit
-import CardValue
+import entity.CardSuit
+import entity.CardValue
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 
@@ -65,10 +65,10 @@ class CardImageLoader {
  *
  */
 private val CardSuit.row get() = when (this) {
-    CardSuit.CLUB -> 0
-    CardSuit.DIAMOND -> 1
-    CardSuit.HEART -> 2
-    CardSuit.SPADE -> 3
+    CardSuit.CLUBS -> 0
+    CardSuit.DIAMONDS -> 1
+    CardSuit.HEARTS -> 2
+    CardSuit.SPADES -> 3
 }
 
 

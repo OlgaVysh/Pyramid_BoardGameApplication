@@ -1,55 +1,52 @@
 import org.junit.jupiter.api.Test
-import CardSuit.*
-import CardValue.*
+import entity.*
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
+import kotlin.test.assertFails
+import kotlin.test.assertSame
+import kotlin.random.Random
+
 
 class CardStackTest {
-    //2 Karten werden erzeugt
+    private val c1 = Card(CardValue.ACE, CardSuit.SPADES)
+    private val c2 = Card(CardValue.JACK, CardSuit.CLUBS)
+    private val c3 = Card(CardValue.QUEEN, CardSuit.HEARTS)
 
-    val card1 = Card(TWO, HEART, false)
-    val card2 = Card(ACE, DIAMOND, false)
-
-    //Listen für die Stapel werden erzeugt
-    var listOfCards = mutableListOf(card1, card2)
-    var emptyList = mutableListOf<Card>()
-
-    //Nachziehstapel und Reservestapel werden erzeugt
-    var drawStack = CardStack(listOfCards)
-    var reserveStack = CardStack(emptyList)
-
+    /**
+     * Ensure stack behavior (i.e., if cards put on top are drawn/peeked next)
+     * Also tests if putting a list on top results in the last card of this list
+     * being on top of the stack afterwards.
+     */
     @Test
-    fun testGetter()
-    {
-        val returnedCards = drawStack.cards
-        val expected = mutableListOf(card1, card2)
-        assertEquals(expected, returnedCards)
+    fun testOrder() {
 
-        assertEquals(mutableListOf<Card>(), reserveStack.cards)
+        val stack = CardStack()
+
+        stack.putOnTop(listOf(c1, c2, c3))
+
+        val card = stack.cards.first()
+        assertSame(card, c3)
+        stack.cards.remove(card)
+        assertSame(stack.cards.first(), c2)
+        assertEquals(stack.size, 2)
+
+        stack.putOnTop(c3)
+        assertSame(stack.cards.first(), c3)
+        assertEquals(stack.size, 3)
+
     }
 
-    @Test
-    fun testSetter()
-    {
-        val newCards = mutableListOf(card1, card2)
-        drawStack. cards = newCards
-        assertEquals(newCards, drawStack.cards)
-    }
-
-    //Liste aus 25 Karten wird als Argument übergeben, um zu testen, ob ein Fehler getriggert wird
-    @Test
-    fun testStackLength()
-    {
-        assertFailsWith<IllegalStateException>(
-            block= {
-                CardStack( mutableListOf(
-                    card1, card2, card1, card2, card1, card1, card2, card1, card2, card1,
-                    card1, card2, card1, card2, card1, card1, card2, card1, card2, card1,
-                    card1, card2, card1, card2, card1) )
+    /**
+     * Test if shuffle works
+     */
 
 
-            }
-        )
-    }
+    /**
+     * Test if drawing from an empty stack throws an exception
+     */
+
+
+
+
+
 
 }

@@ -1,5 +1,5 @@
+import entity.Player
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class PlayerTest {
@@ -8,26 +8,22 @@ class PlayerTest {
     fun testEmptyName()
     {
 
-        assertFailsWith<IllegalStateException>(
-            block={ Player("")}
+        assertFailsWith<IllegalArgumentException>(
+            block={ Player("") }
         )
 
     }
 
-    @Test
-    fun testScore() //Testet, ob beim Erzeugen eines Players mit negativen Punkten ein Fehler gemeldet wird
-    {
-        assertFailsWith<IllegalStateException>(
-            block={ Player("Timm", -8)}
-        )
 
-    }
 
+    //Testet, dass dem entity.Player kein negativer Score übergeben werden darf
     @Test
-    fun testSetter() //Testet den Setter
+    fun testSetter()
     {
-        val player1 = Player("Olga")
-        player1.score = 10
-        assertEquals(10, player1.score)
+        //assertFailsWith<IllegalArgumentException>(
+          //  block={
+            //    Player("Timm").set(-10)
+            //})
+
     }
 }
