@@ -42,15 +42,30 @@ class GameService (private val rootService: RootService) : AbstractRefreshingSer
     /**
      *  Checks whether card choice of two cards to remove is valid: the value-sum is 15
      *  and max one of the cards is an ACE. Returns true, if the cards can be removed.
+     *  Returns false, if both cards have the same value, because then there are two ACES oe sum is not 15
+     *  Returns true, if one of cards is an ACE, because then the sum is always 15
+     *  If both cards are not ACES, check weather sum is 15 and return the result(boolean)
      *  @param card1 is the first chosen card
      *  @param card2 is the second chosen card
      */
     fun checkCardChoice(card1 : Card, card2 : Card):Boolean
     {
+        val card1Value = card1.cardValue
+        val card2Value = card2.cardValue
 
-        val bothACE = (card1.cardValue == CardValue.ACE)&&(card2.cardValue == CardValue.ACE)
-        val sum = (card1.cardValue.ordinal + card2.cardValue.ordinal)==15
-        return sum && !bothACE
+        if(card1Value == card2Value) return false
+        if ( (CardValue.ACE == card1Value).xor(card2Value == CardValue.ACE)) return true
+
+        //Returns the ordinal of this enumeration constant
+        //(its position in its enum declaration,
+        // where the initial constant is assigned an ordinal of zero)
+        //cardValue.ordinal +2 maps the int of card values : CardValue.TWO.ordinal = 0 and int value is 2
+
+        val card1IntValue = card1Value.ordinal+2
+        val card2IntValue = card2Value.ordinal+2
+
+        return card1IntValue + card2IntValue==15
+
     }
 
 

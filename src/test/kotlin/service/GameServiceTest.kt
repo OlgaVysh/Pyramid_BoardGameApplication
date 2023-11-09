@@ -1,6 +1,6 @@
 package service
 import entity.*
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -80,22 +80,22 @@ fun testChangePlayer()
         //Summe 15, aber beide ACE
         val card1 = Card(CardValue.ACE, CardSuit.HEARTS)
         val card2 = Card(CardValue.ACE, CardSuit.DIAMONDS)
-        //assertFalse { game.gameService.checkCardChoice(card1,card2) }
+        assertFalse { game.gameService.checkCardChoice(card1,card2) }
 
         //Summe nicht 15
         val card3 = Card(CardValue.TWO, CardSuit.HEARTS)
         val card4 = Card(CardValue.EIGHT, CardSuit.HEARTS)
-        //assertFalse { game.gameService.checkCardChoice(card3,card4) }
+        assertFalse { game.gameService.checkCardChoice(card3,card4) }
 
         //ein Ace
         val card5 = Card(CardValue.ACE, CardSuit.HEARTS)
         val card6 = Card(CardValue.TWO, CardSuit.HEARTS)
-        //assertTrue { game.gameService.checkCardChoice(card5,card6) }
+        assertTrue { game.gameService.checkCardChoice(card5,card6) }
 
         //Summe 15 ohne ACE
         val card7 = Card(CardValue.TWO, CardSuit.HEARTS)
         val card8 = Card(CardValue.KING, CardSuit.DIAMONDS)
-        //assertTrue { game.gameService.checkCardChoice(card7,card8) }
+        assertTrue { game.gameService.checkCardChoice(card7,card8) }
     }
 
     /**

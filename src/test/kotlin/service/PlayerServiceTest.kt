@@ -1,4 +1,5 @@
 package service
+import entity.*
 import org.junit.jupiter.api.Assertions.assertNotNull
 import kotlin.test.*
 
@@ -32,15 +33,18 @@ class PlayerServiceTest {
     fun testPass()
     {
         val game = startGame()
+        val currentPlayer = game.currentGame!!.currentPlayer
         assertFalse(game.currentGame!!.opponentPassed) //am Anfang des Spiels hat noch keiner gepasst
 
         game.playerActionService.pass()
+
         assertTrue(game.currentGame!!.opponentPassed) //es wurde einmal gepasst
+        assertNotEquals(currentPlayer, game.currentGame!!.currentPlayer) //teste, ob spieler gewechselt wurde
+
         //wenn es zum 2en mal gepasst wurde, wird endGame() aufgerufen
         //da beide Spieler keine Punkte gesammelt haben, muss das Spiel mit Gleichstand enden
         //das konnte ich noch nicht implementieren, endGame() wird zwar aufgerufen und liefert das Ergebnis,
         //aber ich kann es nicht abfangen
-
         val end = game.playerActionService.pass().toString()
         //assertEquals("It's a tie! Score Player 1 : 0, score Player 2 : 0",end)
 
@@ -52,8 +56,10 @@ class PlayerServiceTest {
     @Test
     fun testRemovePair()
     {
-        //noch nicht geschafft
+
+       //nicht geschafft
     }
+
 
     /**
      * Tests methods revealCard()
@@ -62,6 +68,8 @@ class PlayerServiceTest {
     fun testRevealCard()
     {
         val game = startGame()
+
+        val currentPlayer = game.currentGame!!.currentPlayer
 
         assertFalse(game.currentGame!!.drawStack.empty) //DrawStack nicht leer
 
@@ -82,5 +90,9 @@ class PlayerServiceTest {
        //Die Karte ist nicht mehr im DrawStack aber ist im ReserveStack
         assertFalse(game.currentGame!!.drawStack.cards.contains(card))
         assertTrue(game.currentGame!!.reserveStack.cards.contains(card))
+
+        //opponentPassed wurde auf false gesetzt und player wurde gewechslet
+        assertFalse(game.currentGame!!.opponentPassed)
+        assertNotEquals(currentPlayer, game.currentGame!!.currentPlayer)
     }
 }

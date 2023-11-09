@@ -21,7 +21,10 @@ data class Card(val cardValue : CardValue, val cardSuit : CardSuit){
      */
     override fun toString() = "$cardSuit:$cardValue"
 
-
+    /**
+     *  this method calculates the sum of the two card values ordinals
+     *  Is used in GameService to check weather sum is 15
+     */
 
 
 }
