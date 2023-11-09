@@ -15,6 +15,8 @@ class PlayerServiceTest {
      * @return the root service holding the started game as [RootService.currentGame]
      */
 
+
+
     private fun startGame() : RootService
     {
         val mc = RootService()
@@ -50,14 +52,72 @@ class PlayerServiceTest {
 
     }
 
+
     /**
-     * Tests methods removePair()
+     * Tests method removePair()
      */
     @Test
     fun testRemovePair()
     {
+        val game = startGame()
+        val currentPlayer = game.currentGame!!.currentPlayer
 
-       //nicht geschafft
+        //Karten für die Eingabe erstellen
+
+        //zwei Karten aus der Pyramide
+        val card1 = game.currentGame!!.pyramid.cards.elementAt(3).last()
+        val card2 = game.currentGame!!.pyramid.cards.elementAt(5).first()
+        //die oberste Karte vom drawStack
+        val card3 = game.currentGame!!.drawStack.cards.first()
+
+
+        //2 Karten aus der Pyramide testen
+        if(game.gameService.checkCardChoice(card1,card2)) //wenn Kartenauswahl valide (1 ACE oder summe 15)
+        {
+            game.playerActionService.removePair(card1, card2)
+            assertFalse(game.currentGame!!.pyramid.cards.elementAt(3).contains(card1)) //card1 wurde entfernt
+            assertFalse(game.currentGame!!.pyramid.cards.elementAt(5).contains(card2)) //card2 wurde entfernt
+
+            //Karten wurden umgedreht
+            assertTrue(game.currentGame!!.pyramid.cards.elementAt(3).last().isRevealed)
+            assertTrue(game.currentGame!!.pyramid.cards.elementAt(5).first().isRevealed)
+
+            //opponentPassed wurde auf false gesetzt und player wurde gewechslet
+            assertFalse(game.currentGame!!.opponentPassed)
+            assertNotEquals(currentPlayer, game.currentGame!!.currentPlayer)
+        }
+
+        else //wenn Kartenauswahl invalide (2 ACE oder summe!= 15)
+        {
+            val exception = assertFailsWith<IllegalArgumentException>(
+                block={  game.playerActionService.removePair(card1, card2)}
+            )
+            assertEquals("Invalid cards choice", exception.message)
+        }
+
+        //eine Karte aus der Pyramide und eine aus dem drawStack testen
+        if (game.gameService.checkCardChoice(card1,card3))
+        {
+            game.playerActionService.removePair(card1, card3)
+            assertFalse(game.currentGame!!.pyramid.cards.elementAt(3).contains(card1)) //card1 wurde entfernt
+            assertFalse(game.currentGame!!.drawStack.cards.contains(card3)) //card3 wurde entfernt
+
+            //Karten wurden umgedreht
+            assertTrue(game.currentGame!!.pyramid.cards.elementAt(3).last().isRevealed)
+            assertFalse(game.currentGame!!.drawStack.cards.first().isRevealed)
+
+            //opponentPassed wurde auf false gesetzt und player wurde gewechslet
+            assertFalse(game.currentGame!!.opponentPassed)
+            assertNotEquals(currentPlayer, game.currentGame!!.currentPlayer)
+        }
+        else
+        {
+            val exception = assertFailsWith<IllegalArgumentException>(
+            block={  game.playerActionService.removePair(card1, card3)}
+            )
+            assertEquals("Invalid cards choice", exception.message)
+        }
+
     }
 
 

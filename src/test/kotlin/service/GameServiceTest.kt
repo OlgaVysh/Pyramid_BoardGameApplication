@@ -130,4 +130,25 @@ fun testChangePlayer()
 
    //Method flipCard() will be tested in class TestPlayerActionService as part from the method removePair()
 
+    /**
+     * Tests method testCheckEmptyPyramid
+     * Creates a non-empty pyramid p and calls testCheckEmptyPyramid(p) - should return false
+     * Clears all elements of p and calls testCheckEmptyPyramid(p) - should return true (p is empty)
+     */
+
+    @Test
+    fun testCheckEmptyPyramid()
+    {
+        val game = startGame()
+        val p = game.currentGame!!.pyramid
+        assertFalse(game.gameService.checkEmptyPyramid(p))
+
+        //Pyramide leeren
+        val cardsIterator = p.cards.iterator()
+        while(cardsIterator.hasNext())
+        {
+            cardsIterator.next().clear()
+        }
+        assertTrue(game.gameService.checkEmptyPyramid(p))
+    }
 }

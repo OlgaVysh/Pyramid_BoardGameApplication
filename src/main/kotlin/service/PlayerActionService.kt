@@ -94,6 +94,9 @@ class PlayerActionService (private val rootService: RootService) : AbstractRefre
             val currentPlayer = rootService.currentGame!!.currentPlayer
             rootService.currentGame!!.players[currentPlayer].score++
             rootService.gameService.changePlayer()
+
+            //Beende das Spiel, falls die Pyramide leer ist
+            if(rootService.gameService.checkEmptyPyramid(game.pyramid)) rootService.gameService.endGame()
         }
         onAllRefreshables { refreshAfterRemovePair (card1_isValid && card2_isValid) }
     }

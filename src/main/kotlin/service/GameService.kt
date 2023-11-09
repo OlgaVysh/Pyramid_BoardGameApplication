@@ -102,6 +102,22 @@ class GameService (private val rootService: RootService) : AbstractRefreshingSer
 
 
     /**
+     *  checks if a pyramid is empty and returns a boolean
+     */
+    fun checkEmptyPyramid( p : Pyramid) : Boolean
+    {
+        val cardsIterator = p.cards.iterator()
+
+        var pyramidEmpty = cardsIterator.next().isEmpty()
+        while (cardsIterator.hasNext() && pyramidEmpty)
+        {
+            pyramidEmpty = pyramidEmpty && cardsIterator.next().isEmpty()
+
+        }
+        return pyramidEmpty
+    }
+
+    /**
      *  calculates the outcome of the game it returns it as a String. If there's a winner, his/her name
      *  will be returned. If both players have the same score, "it's a tie" will
      *  be returned as a result.
@@ -163,5 +179,6 @@ class GameService (private val rootService: RootService) : AbstractRefreshingSer
         stack.putOnTop(cards)
         return stack
     }
+
 
 }
