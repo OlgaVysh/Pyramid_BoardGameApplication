@@ -46,7 +46,7 @@ class CardTest {
     @Test //Überprüfe die Methode toString()
     fun testToString()
     {
-        val expected = "entity.Card(cardValue=TWO, cardSuit=HEART)"
+        val expected = "HEARTS:2"
         val result = card1.toString()
         assertEquals(expected, result)
     }
