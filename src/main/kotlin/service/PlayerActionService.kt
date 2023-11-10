@@ -92,7 +92,7 @@ class PlayerActionService (private val rootService: RootService) : AbstractRefre
             rootService.gameService.flipCard()
             rootService.currentGame!!.opponentPassed=false
             val currentPlayer = rootService.currentGame!!.currentPlayer
-            rootService.currentGame!!.players[currentPlayer].score++
+            rootService.currentGame!!.players[currentPlayer-1].score++
             rootService.gameService.changePlayer()
 
             //Beende das Spiel, falls die Pyramide leer ist
