@@ -136,4 +136,23 @@ fun testChangePlayer()
         }
         assertTrue(game.gameService.checkEmptyPyramid(p))
     }
+
+    @Test
+    fun testSetScore()
+    {
+        val game = startGame()
+
+        //ein Ace
+        val card5 = Card(CardValue.ACE, CardSuit.HEARTS)
+        val card6 = Card(CardValue.TWO, CardSuit.HEARTS)
+        game.gameService.setScore(card5,card6)
+        assertEquals(1, game.gameService.setScore(card5, card6))
+
+        //Summe 15 ohne ACE
+        val card7 = Card(CardValue.TWO, CardSuit.HEARTS)
+        val card8 = Card(CardValue.KING, CardSuit.DIAMONDS)
+        assertEquals(2, game.gameService.setScore(card7, card8))
+
+
+    }
 }
