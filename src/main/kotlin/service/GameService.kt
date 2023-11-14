@@ -40,8 +40,8 @@ class GameService (private val rootService: RootService) : AbstractRefreshingSer
     }
 
     /**
-     *  Checks whether card choice of two cards to remove is valid: the value-sum is 15
-     *  and max one of the cards is an ACE. Returns true, if the cards can be removed.
+     *  Checks whether card choice of two cards to remove is valid: cards are flipped, the value-sum is 15
+     *  and max one of the cards is an ACE.
      *  Returns false, if both cards have the same value, because then there are two ACES oe sum is not 15
      *  Returns true, if one of cards is an ACE, because then the sum is always 15
      *  If both cards are not ACES, check weather sum is 15 and return the result(boolean)
@@ -50,6 +50,9 @@ class GameService (private val rootService: RootService) : AbstractRefreshingSer
      */
     fun checkCardChoice(card1 : Card, card2 : Card):Boolean
     {
+        if(! (card1.isRevealed&&card2.isRevealed )) return false
+
+        else{
         val card1Value = card1.cardValue
         val card2Value = card2.cardValue
 
@@ -64,7 +67,7 @@ class GameService (private val rootService: RootService) : AbstractRefreshingSer
         val card1IntValue = card1Value.ordinal+2
         val card2IntValue = card2Value.ordinal+2
 
-        return card1IntValue + card2IntValue==15
+        return card1IntValue + card2IntValue==15}
 
     }
 
@@ -73,12 +76,12 @@ class GameService (private val rootService: RootService) : AbstractRefreshingSer
     /**
      *  Returns the outcome of the game and players scores
      */
-    fun endGame() : String{
+    fun endGame(){
         val game = rootService.currentGame
         checkNotNull(game) { "No game currently running."}
         val result = showResult()
-        onAllRefreshables { refreshAfterEndGame() }
-        return result + " Score Player 1 : " + game.players[0].score + ", score Player 2 : " + game.players[1].score
+        onAllRefreshables { refreshAfterEndGame(result) }
+
     }
 
     /**
@@ -115,6 +118,22 @@ class GameService (private val rootService: RootService) : AbstractRefreshingSer
 
         }
         return pyramidEmpty
+    }
+
+    /**
+     *  Returns an int value by which player's score must be increased.
+     *  Is only called by the method removePair() (PlayerActionService) after the cards are approved to be removed by
+     *  the method checkPair().
+     *  If one of the cards is ACE, score will be increased by one point, otherwise by two.
+     *  @param card1 is the first removed card
+     *  @param card2 is the second removed card
+     */
+    fun setScore(card1 : Card, card2 : Card) : Int
+    {
+        val card1Value = card1.cardValue
+        val card2Value = card2.cardValue
+        if ( (CardValue.ACE == card1Value).xor(card2Value == CardValue.ACE)) return 1
+        else return 2
     }
 
     /**
