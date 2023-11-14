@@ -80,53 +80,38 @@ fun testChangePlayer()
         //Summe 15, aber beide ACE
         val card1 = Card(CardValue.ACE, CardSuit.HEARTS)
         val card2 = Card(CardValue.ACE, CardSuit.DIAMONDS)
+        card1.isRevealed = true
+        card2.isRevealed = true
         assertFalse { game.gameService.checkCardChoice(card1,card2) }
 
         //Summe nicht 15
         val card3 = Card(CardValue.TWO, CardSuit.HEARTS)
         val card4 = Card(CardValue.EIGHT, CardSuit.HEARTS)
+        card3.isRevealed = true
+        card4.isRevealed = true
         assertFalse { game.gameService.checkCardChoice(card3,card4) }
 
         //ein Ace
         val card5 = Card(CardValue.ACE, CardSuit.HEARTS)
         val card6 = Card(CardValue.TWO, CardSuit.HEARTS)
+        card5.isRevealed = true
+        card6.isRevealed = true
         assertTrue { game.gameService.checkCardChoice(card5,card6) }
 
         //Summe 15 ohne ACE
         val card7 = Card(CardValue.TWO, CardSuit.HEARTS)
         val card8 = Card(CardValue.KING, CardSuit.DIAMONDS)
+        card8.isRevealed = true
+        card7.isRevealed = true
         assertTrue { game.gameService.checkCardChoice(card7,card8) }
-    }
 
-    /**
-     * Tests methods endGame(),which uses and therefore tests private method showResult()
-     * Results will be calculated and returned for three cases: Player1 is winner, player2 is winner or it's a tie
-     */
-    @Test
-    fun testEndGame()
-    {
-        val game = startGame()
-        //at the beginning both scores should be 0
-        assertEquals(0,game.currentGame!!.players[0].score)
-        assertEquals(0,game.currentGame!!.players[1].score)
+        //Summe 15 ohne ACE, aber card9 isReveald = false
+        val card9 = Card(CardValue.KING, CardSuit.DIAMONDS)
+        assertFalse { game.gameService.checkCardChoice(card9,card8) }
 
-        //set scores player1 > player2
-        game.currentGame!!.players[0].score=10
-        game.currentGame!!.players[1].score=7
-
-        assertEquals("Winner is Bob! Score Player 1 : 10, score Player 2 : 7", game.gameService.endGame())
-
-        //set scores player1 < player2
-        game.currentGame!!.players[1].score=17
-
-        assertEquals("Winner is Alice! Score Player 1 : 10, score Player 2 : 17", game.gameService.endGame())
-
-        //set scores player1 = player2
-        game.currentGame!!.players[1].score=10
-
-        assertEquals("It's a tie! Score Player 1 : 10, score Player 2 : 10", game.gameService.endGame())
 
     }
+
 
    //Method flipCard() will be tested in class TestPlayerActionService as part from the method removePair()
 

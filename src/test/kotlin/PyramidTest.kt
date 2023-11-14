@@ -4,6 +4,7 @@ import entity.*
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 class PyramidTest {
     //Karten für die entity.Pyramide werden erzeugt
@@ -62,5 +63,19 @@ class PyramidTest {
 
         newPyramid.cards= listOf(cardRow1, cardRow2, cardRow3, cardRow4, cardRow5, cardRow6, newCardRow7)
         assertEquals(listOf(cardRow1, cardRow2, cardRow3, cardRow4, cardRow5, cardRow6, newCardRow7), newPyramid.cards)
+    }
+
+    @Test
+    fun testRevealedCards()
+    {
+        val newPyramid = Pyramid (listOf(cardRow1, cardRow2, cardRow3, cardRow4, cardRow5, cardRow6, cardRow7))
+        assertTrue(newPyramid.cards.first().first().isRevealed)
+        assertTrue(newPyramid.cards[1].first().isRevealed && newPyramid.cards[1].last().isRevealed)
+        assertTrue(newPyramid.cards[2].first().isRevealed && newPyramid.cards[2].last().isRevealed)
+        assertTrue(newPyramid.cards[3].first().isRevealed && newPyramid.cards[3].last().isRevealed)
+        assertTrue(newPyramid.cards[4].first().isRevealed && newPyramid.cards[4].last().isRevealed)
+        assertTrue(newPyramid.cards[5].first().isRevealed && newPyramid.cards[5].last().isRevealed)
+        assertTrue(newPyramid.cards[6].first().isRevealed && newPyramid.cards[6].last().isRevealed)
+
     }
 }

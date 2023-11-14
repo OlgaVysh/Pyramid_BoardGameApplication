@@ -62,6 +62,7 @@ class PlayerServiceTest {
         val game = startGame()
         val currentPlayer = game.currentGame!!.currentPlayer
 
+
         //Karten für die Eingabe erstellen
 
         //zwei Karten aus der Pyramide
