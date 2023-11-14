@@ -11,6 +11,6 @@ interface Refreshable {
 
     fun refreshAfterStartGame() {}
 
-    fun refreshAfterEndGame() {}
+    fun refreshAfterEndGame(message : String) {}
 
 }
