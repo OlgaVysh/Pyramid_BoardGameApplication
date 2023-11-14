@@ -16,7 +16,6 @@ class PlayerActionService (private val rootService: RootService) : AbstractRefre
     fun pass( ) {
         val game = rootService.currentGame
         checkNotNull(game) { "No game started yet."}
-        onAllRefreshables { refreshAfterPass() }
         if(!game.opponentPassed)
         {
             game.opponentPassed = true
@@ -24,6 +23,7 @@ class PlayerActionService (private val rootService: RootService) : AbstractRefre
         }
 
         else rootService.gameService.endGame()
+        onAllRefreshables { refreshAfterPass() }
     }
 
     /**
@@ -36,69 +36,62 @@ class PlayerActionService (private val rootService: RootService) : AbstractRefre
      */
     fun removePair(card1 : Card, card2 : Card) {
         val game = rootService.currentGame
-        checkNotNull(game) { "No game started yet."}
+        checkNotNull(game) { "No game started yet." }
 
-        require(rootService.gameService.checkCardChoice(card1, card2)) {"Invalid cards choice"}
+        require(rootService.gameService.checkCardChoice(card1, card2)) { "Invalid cards choice" }
 
         var card1_isValid = false
         var card2_isValid = false
 
-        val cardFromStack = game.drawStack.cards.first()
-        //erste Karte vom drawStack, die zweite aus Pyramide
-            if(card1 == cardFromStack)
-            {
-                card1_isValid = game.drawStack.cards.remove(card1)
-                card1.isRevealed = true
-                game.reserveStack.cards.addFirst(card1)
+        val cardFromStack = game.reserveStack.cards.first()
+        //erste Karte vom reserveStack, die zweite aus Pyramide
+        if (card1 == cardFromStack) {
+            card1_isValid = game.reserveStack.cards.remove(card1)
 
-                val cardsIterator = game.pyramid.cards.iterator()
+            val cardsIterator = game.pyramid.cards.iterator()
 
-                while (cardsIterator.hasNext() && !card2_isValid)
-                {
-                    card2_isValid = cardsIterator.next().remove(card2)
-                }
-
-            }
-            //Die zweite Karte vom drawStack, die erste aus Pyramide
-            else if (card2 == cardFromStack)
-            {
-                card2_isValid = game.drawStack.cards.remove(card2)
-                card2.isRevealed = true
-                game.reserveStack.cards.addFirst(card2)
-
-                val cardsIterator = game.pyramid.cards.iterator()
-
-                while (cardsIterator.hasNext() && !card1_isValid)
-                {
-                    card1_isValid = cardsIterator.next().remove(card1)
-                }
-
+            while (cardsIterator.hasNext() && !card2_isValid) {
+                card2_isValid = cardsIterator.next().remove(card2)
             }
 
-            else //Beide Karten aus der Pyramide
-            {
-                val cardsIterator = game.pyramid.cards.iterator()
-                while (cardsIterator.hasNext() && !(card1_isValid && card2_isValid) )
-                {
-                    card1_isValid = cardsIterator.next().remove(card1)
-                    card2_isValid = cardsIterator.next().remove(card2)
-                }
 
+        }
+        //Die zweite Karte vom reserveStack, die erste aus Pyramide
+        else if (card2 == cardFromStack) {
+            card2_isValid = game.reserveStack.cards.remove(card2)
 
+            val cardsIterator = game.pyramid.cards.iterator()
+
+            while (cardsIterator.hasNext() && !card1_isValid) {
+                card1_isValid = cardsIterator.next().remove(card1)
             }
+
+        } else //Beide Karten aus der Pyramide
+        {
+            val cardsIterator = game.pyramid.cards.iterator()
+            while (cardsIterator.hasNext() && !(card1_isValid && card2_isValid)) {
+                card1_isValid = cardsIterator.next().remove(card1)
+                card2_isValid = cardsIterator.next().remove(card2)
+            }
+
+
+        }
 
         if (card1_isValid && card2_isValid) //wenn beide Karten erfolgreich entfern wurden
         {
-            rootService.gameService.flipCard()
-            rootService.currentGame!!.opponentPassed=false
             val currentPlayer = rootService.currentGame!!.currentPlayer
-            rootService.currentGame!!.players[currentPlayer-1].score++
-            rootService.gameService.changePlayer()
+            rootService.currentGame!!.players[currentPlayer - 1].score += rootService.gameService.setScore(card1, card2)
 
             //Beende das Spiel, falls die Pyramide leer ist
-            if(rootService.gameService.checkEmptyPyramid(game.pyramid)) rootService.gameService.endGame()
+            if (rootService.gameService.checkEmptyPyramid(game.pyramid)) rootService.gameService.endGame()
+            else {
+                rootService.gameService.flipCard() //Pyramide anpassen
+                rootService.currentGame!!.opponentPassed = false //es wurde nicht gepasst
+
+                onAllRefreshables { refreshAfterRemovePair(card1_isValid && card2_isValid) }
+                rootService.gameService.changePlayer()
+            }
         }
-        onAllRefreshables { refreshAfterRemovePair (card1_isValid && card2_isValid) }
     }
 
     /**
