@@ -43,6 +43,14 @@ class Pyramid (var cards : List<MutableList<Card>>) {
         require(row7.size==7){"The seventh row of pyramid should contain 7 cards"}
 
 
+        cards.forEach{
+
+                it.first().isRevealed = true
+                it.last().isRevealed = true
+
+        }
+
+
     }
 
     /**
