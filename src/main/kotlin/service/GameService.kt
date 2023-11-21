@@ -79,8 +79,9 @@ class GameService (private val rootService: RootService) : AbstractRefreshingSer
     fun endGame(){
         val game = rootService.currentGame
         checkNotNull(game) { "No game currently running."}
-        val result = showResult()
-        onAllRefreshables { refreshAfterEndGame(result) }
+        showResult()
+        onAllRefreshables { refreshAfterEndGame() }
+
 
     }
 
