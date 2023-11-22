@@ -304,13 +304,13 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
         //set the first card to current card
         if (b1) {
             card1 = cardView
-            cardView.opacity = 0.1
+            cardView.opacity = 0.5
         }
 
         //set the second card to the current card
         else if (b2) {
             card2 = cardView
-            cardView.opacity = 0.1
+            cardView.opacity = 0.5
         }
         //when both cards are already set - card not clickable
         else cardView.isDisabled = true
