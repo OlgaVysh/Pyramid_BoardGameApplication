@@ -1,4 +1,8 @@
 package view
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import tools.aqua.bgw.core.BoardGameApplication
 import service.*
 import tools.aqua.bgw.animation.DelayAnimation
@@ -54,18 +58,15 @@ class PyramidApplication : BoardGameApplication("Pyramide"), Refreshable {
             newGameMenuScene,
             gameFinishedMenuScene
         )
-        //after the application start the first scene to be shown is a new game scene
+        //after the application start the first scene to be shown is a logo of the game fading in
+        // the new game scene
         this.showGameScene(startScene)
-        this.showMenuScene(newGameMenuScene,1000)
-       /* startScene.lock()
-        startScene.playAnimation(
-            DelayAnimation(duration = 500).apply {
-                onFinished = {
-                    this@PyramidApplication.showMenuScene(newGameMenuScene)
-                    startScene.unlock()
-                }
-            })*/
-
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(1000)
+            runOnGUIThread{
+                this@PyramidApplication.showMenuScene(newGameMenuScene,3000)
+            }
+        }.start()
 
 
     }
