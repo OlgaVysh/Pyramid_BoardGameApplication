@@ -465,10 +465,9 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
             val cardRow = pyramid[0, i]?.toList()
             if (cardRow != null) {
                 cardRow.forEach {
-                    val card = cardMap.backward(it)
-                    val cardImageLoader = CardImageLoader()
-                    val cardImage =ImageVisual(cardImageLoader.frontImageFor(card.cardSuit, card.cardValue))
-                    it.frontVisual= cardImage
+                    if(it.visual is CompoundVisual){
+                        it.frontVisual = (it.visual as CompoundVisual).children.first()
+                    }
                     it.isDisabled = false
                 }
             }
