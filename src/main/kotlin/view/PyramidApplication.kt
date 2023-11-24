@@ -2,6 +2,9 @@ package view
 import tools.aqua.bgw.core.BoardGameApplication
 import service.*
 import tools.aqua.bgw.animation.DelayAnimation
+/**
+ * Implementation of the BGW [BoardGameApplication] for the example card game "Pyramid"
+ */
 
 class PyramidApplication : BoardGameApplication("Pyramide"), Refreshable {
 
@@ -12,6 +15,8 @@ class PyramidApplication : BoardGameApplication("Pyramide"), Refreshable {
 
     //scenes
 
+    private val startScene = StartScene(this)
+
     // This menu scene is shown after application start and if the "new game" button
     // is clicked in the gameFinishedMenuScene
        private val newGameMenuScene = NewGameMenuScene(rootService).apply {
@@ -19,11 +24,6 @@ class PyramidApplication : BoardGameApplication("Pyramide"), Refreshable {
             exit()
         }
 
-        startButton.onMouseClicked = {
-            rootService.gameService.startGame(p1Input.text,p2Input.text)
-            gameScene.player1Label.text += rootService.currentGame!!.players[0].name
-            gameScene.player2Label.text += rootService.currentGame!!.players[1].name
-        }
     }
 
     //this is the te actual game takes place
@@ -55,12 +55,25 @@ class PyramidApplication : BoardGameApplication("Pyramide"), Refreshable {
             gameFinishedMenuScene
         )
         //after the application start the first scene to be shown is a new game scene
-        this.showMenuScene(newGameMenuScene)
+        this.showGameScene(startScene)
+        this.showMenuScene(newGameMenuScene,1000)
+       /* startScene.lock()
+        startScene.playAnimation(
+            DelayAnimation(duration = 500).apply {
+                onFinished = {
+                    this@PyramidApplication.showMenuScene(newGameMenuScene)
+                    startScene.unlock()
+                }
+            })*/
+
+
 
     }
 
     //the new game menu scene is changed by game scene after player clicked "start"
     override fun refreshAfterStartGame() {
+        gameScene.player1Label.text = "Player 1: "+ rootService.currentGame!!.players[0].name
+        gameScene.player2Label.text = "Player 2: "+rootService.currentGame!!.players[1].name
         this.showGameScene(gameScene)
         this.hideMenuScene()
 
@@ -80,25 +93,10 @@ class PyramidApplication : BoardGameApplication("Pyramide"), Refreshable {
                 }
             })
 
-        //if players click on "new Game" button in the game finished scene, the names are not taken over
-        // in the new game and will be reset.
-        newGameMenuScene.p1Input.text="";
-        newGameMenuScene.p2Input.text="";
 
-        newGameMenuScene.startButton.isDisabled = newGameMenuScene.p1Input.text.isBlank() || newGameMenuScene.p2Input.text.isBlank()
-
-        newGameMenuScene.p1Input.apply {
-            onKeyTyped = {
-                newGameMenuScene.startButton.isDisabled = this.text.isBlank() || newGameMenuScene.p2Input.text.isBlank()
-            } }
-
-            newGameMenuScene.p2Input.apply {
-                onKeyTyped = {
-                    newGameMenuScene.startButton.isDisabled =
-                        this.text.isBlank() || newGameMenuScene.p1Input.text.isBlank()
-                }
-
-            }
+        //refresh the Views
+        gameScene.cardMap.clear()
+        gameScene.reserveStack.clear()
 
         }
 

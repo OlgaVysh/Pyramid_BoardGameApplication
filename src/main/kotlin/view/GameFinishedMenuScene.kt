@@ -19,35 +19,38 @@ import java.awt.Color
 
 
         private val headlineLabel = Label(
-            width = 300, height = 50, posX = 790, posY = 125,
+            width = 629, height = 145, posX = 652, posY = 179,
             text = "Game Over",
-            font = Font(size = 32)
+            font = Font(size = 120)
         )
 
-        private val p2Score = Label(width = 300, height = 35, posX = 775, posY = 256)
+        private val p2Score = Label(width = 479, height = 48, posX = 721, posY = 694,font = Font(size = 40))
 
-        private val p1Score = Label(width = 300, height = 35, posX = 775, posY = 386)
+        private val p1Score = Label(width = 479, height = 48, posX = 721, posY = 584,font = Font(size = 40))
 
-        private val gameResult = Label(width = 300, height = 35, posX = 775, posY = 516).apply {
-        }
+        private val gameResult = Label(width = 479, height = 48, posX = 721, posY = 430,font = Font(size = 40))
 
         val quitButton = Button(
-            width = 140, height = 35,
-            posX = 775, posY = 650,
+            width = 220, height = 105,
+            posX = 721, posY = 804,
             text = "Quit"
         ).apply {
-            visual = ColorVisual(221, 136, 136)
+            visual = ColorVisual(Color(231, 25, 25))
+            font = Font(size = 30)
         }
 
         val newGameButton = Button(
-            width = 140, height = 35,
-            posX = 935, posY = 650,
+            width = 220, height = 105,
+            posX = 980, posY = 804,
             text = "New Game"
         ).apply {
-            visual = ColorVisual(136, 221, 136)
+            visual = ColorVisual(Color(83, 227, 73))
+            font = Font(size = 30)
        }
 
         init {
+            background = ColorVisual(Color(195, 244, 198))
+            opacity = 0.91
             addComponents(headlineLabel, p1Score, p2Score, gameResult, newGameButton, quitButton)
             opacity=1.0
         }
@@ -74,6 +77,7 @@ import java.awt.Color
             p1Score.text = player1.scoreString()
             p2Score.text = player2.scoreString()
             gameResult.text = game.gameResultString()
+
 
 
         }

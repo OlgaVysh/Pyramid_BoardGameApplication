@@ -1,5 +1,4 @@
 import view.PyramidApplication
-import view.SopraApplication
 
 
 fun main() {

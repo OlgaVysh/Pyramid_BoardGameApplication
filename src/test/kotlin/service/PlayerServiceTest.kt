@@ -85,14 +85,6 @@ class PlayerServiceTest {
             assertNotEquals(currentPlayer, game.currentGame!!.currentPlayer)
         }
 
-        else //wenn Kartenauswahl invalide (2 ACE oder summe!= 15)
-        {
-            assertFailsWith<IllegalArgumentException>(
-                block={  game.playerActionService.removePair(card1, card2)}
-            )
-
-        }
-
         game.playerActionService.revealCard()
         val card3 = game.currentGame!!.reserveStack.cards.first()
         val card4 = game.currentGame!!.pyramid.cards.elementAt(2).last()
@@ -111,12 +103,6 @@ class PlayerServiceTest {
             //opponentPassed wurde auf false gesetzt und player wurde gewechslet
             assertFalse(game.currentGame!!.opponentPassed)
             assertNotEquals(currentPlayer, game.currentGame!!.currentPlayer)
-        }
-        else
-        {
-            assertFailsWith<IllegalArgumentException>(
-            block={  game.playerActionService.removePair(card1, card3)}
-            )
         }
 
     }

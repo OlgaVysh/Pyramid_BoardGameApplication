@@ -6,11 +6,13 @@ import tools.aqua.bgw.components.container.LinearLayout
 import tools.aqua.bgw.components.gamecomponentviews.CardView
 import tools.aqua.bgw.components.uicomponents.Button
 import tools.aqua.bgw.components.uicomponents.Label
+import tools.aqua.bgw.core.Alignment
 import tools.aqua.bgw.visual.ColorVisual
 import tools.aqua.bgw.core.BoardGameScene
 import tools.aqua.bgw.visual.ImageVisual
 import tools.aqua.bgw.util.BidirectionalMap
 import tools.aqua.bgw.util.Font
+import tools.aqua.bgw.visual.CompoundVisual
 import java.awt.Color
 /**
  * This is the main scene for the Pyramid Game. The scene shows the complete table at once.
@@ -26,7 +28,7 @@ import java.awt.Color
 
 class GameTableScene (private val rootService: RootService) : BoardGameScene(1920, 1080), Refreshable {
 
-    private val drawStack = LabeledStackView(posX = 895, posY = 530, "draw stack is empty").apply {
+    private val drawStack = LabeledStackView(posX = 1047, posY = 432, "draw stack is empty").apply {
         onMouseClicked = {
             rootService.currentGame?.let { game ->
                 rootService.playerActionService.revealCard() //if the draw stack is clicked call a methode
@@ -38,43 +40,44 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
 
     val pyramid = PyramidView(480, 540)
 
-    private val reserveStack = LabeledStackView(posX = 895, posY = 830, "reserve stack is empty").apply {
+    val reserveStack = LabeledStackView(posX = 1616, posY = 432, "reserve stack is empty").apply {
         onMouseClicked = {
             setCard(this.components.last()) //if reserve stack is clicked pass the top card to be evaluated to be removed
         }
     }
 
     private val passButton = Button(
-        width = 140, height = 35,
-        posX = 1500, posY = 500,
+        width = 407, height = 87,
+        posX = 1341, posY = 944,
         text = "Passen"
     ).apply {
-        visual = ColorVisual(232, 18, 18)
+        visual = ColorVisual(Color(232, 18, 18))
+        font = Font(30)
         onMouseClicked = {
             rootService.playerActionService.pass() }
     }
 
     val endButton = Button(
         width = 140, height = 35,
-        posX = 1500, posY = 1000,
-        text = "End"
+        posX = 1339, posY = 749,
+        text = "Quit"
     ).apply {
-        visual = ColorVisual(232, 18, 18)
+        visual = ColorVisual(Color(232, 18, 18))
     }
 
     var player1Label: Label = Label(
-        height = 100,
-        width = 200,
-        posX = 1050,
-        posY = 0,
+        height = 48,
+        width = 407,
+        posX = 909,
+        posY = 61,
         text = "Player 1: ",
     )
 
     var player2Label: Label = Label(
-        height = 100,
-        width = 200,
-        posX = 1400,
-        posY = 0,
+        height = 48,
+        width = 407,
+        posX = 1455,
+        posY = 61,
         text = "Player 2: ",
     )
 
@@ -91,19 +94,18 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
         isDisabled = true
     }
 
-    private val cardMap: BidirectionalMap<Card, CardView> = BidirectionalMap()
+    val cardMap: BidirectionalMap<Card, CardView> = BidirectionalMap()
 
     //these are styles for the current player(highlighted) and the other one
-    private val styleCurrent = Font(30, Color.BLACK, "Arial", Font.FontWeight.BOLD, Font.FontStyle.NORMAL)
-    private val styleWait = Font(15, Color.BLACK, "Arial", Font.FontWeight.NORMAL, Font.FontStyle.NORMAL)
+    private val styleCurrent = Font(40, Color.BLACK, "Arial", Font.FontWeight.BOLD, Font.FontStyle.NORMAL)
+    private val styleWait = Font(30, Color.BLACK, "Arial", Font.FontWeight.NORMAL, Font.FontStyle.NORMAL)
 
     //these variables hold the cards to be evaluated to be removed
     private var card1: CardView? = null
     private var card2: CardView? = null
 
     init {
-
-        background = ColorVisual(Color(115, 246, 110))
+        background = ColorVisual(Color(195, 244, 198))
         opacity = 0.91
 
         addComponents(
@@ -165,7 +167,8 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
             //every row of a pyramid is a linear layout of card views
             val cardRow = LinearLayout<CardView>(480,540,
                 height = 150, width = 750,
-                spacing = 10, visual = ColorVisual(255, 255, 255, 50)
+                spacing = 40, visual = ColorVisual(255, 255, 255, 50),
+                alignment = Alignment.CENTER
             )
             val row = pyramid.cards[i].toList()
             row.forEach { card ->
@@ -303,14 +306,17 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
 
         //set the first card to current card
         if (b1) {
+
+            //this is done to highlight the chosen card
+            highlightCard(cardView)
             card1 = cardView
-            cardView.opacity = 0.5
         }
 
         //set the second card to the current card
         else if (b2) {
+            //this is done to highlight the chosen card
+            highlightCard(cardView)
             card2 = cardView
-            cardView.opacity = 0.5
         }
         //when both cards are already set - card not clickable
         else cardView.isDisabled = true
@@ -321,6 +327,18 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
         }
 
 
+    }
+
+    /**
+     * This method is applied on a clicked cardView and highlightes it blue
+     */
+    private fun highlightCard(cardView:CardView)
+    {
+        val card = cardMap.backward(cardView)
+        val cardImageLoader = CardImageLoader()
+        val cardImage = ImageVisual(cardImageLoader.frontImageFor(card.cardSuit, card.cardValue))
+        val cardVisual = CompoundVisual(cardImage, ColorVisual.BLUE.apply { transparency = 0.2 })
+        cardView.frontVisual = cardVisual
     }
 
     /**
@@ -434,7 +452,6 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
                 })
         }
 
-        //in any case refresh all the cards and buttons for another turn
         refreshAfterTurn()
     }
 
@@ -448,7 +465,10 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
             val cardRow = pyramid[0, i]?.toList()
             if (cardRow != null) {
                 cardRow.forEach {
-                    it.opacity = 1.0
+                    val card = cardMap.backward(it)
+                    val cardImageLoader = CardImageLoader()
+                    val cardImage =ImageVisual(cardImageLoader.frontImageFor(card.cardSuit, card.cardValue))
+                    it.frontVisual= cardImage
                     it.isDisabled = false
                 }
             }
@@ -457,7 +477,10 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
 
         if(!reserveStack.isEmpty() ){
             reserveStack.components.last().apply{
-                opacity = 1.0
+                val card = cardMap.backward(this)
+                val cardImageLoader = CardImageLoader()
+                val cardImage =ImageVisual(cardImageLoader.frontImageFor(card.cardSuit, card.cardValue))
+                this.frontVisual= cardImage
                 isDisabled = false }
         }
 
