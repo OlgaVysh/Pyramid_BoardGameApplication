@@ -57,13 +57,13 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
             rootService.playerActionService.pass() }
     }
 
-    val endButton = Button(
+    /*val endButton = Button(
         width = 140, height = 35,
         posX = 1339, posY = 749,
         text = "Quit"
     ).apply {
         visual = ColorVisual(Color(232, 18, 18))
-    }
+    }*/
 
     var player1Label: Label = Label(
         height = 48,
@@ -83,15 +83,16 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
 
  //this is a notification shown in an animation
  private var note: Label = Label(
-        height = 200,
-        width = 400,
-        posX = 700,
+        height = 400,
+        width = 800,
+        posX = 570,
         posY = 360,
         text = "",
     ).apply {
         visual = ColorVisual(Color(239, 229, 229))
         isVisible = false
         isDisabled = true
+        font = Font(30, Color.BLACK, "Arial", Font.FontWeight.NORMAL, Font.FontStyle.NORMAL)
     }
 
     val cardMap: BidirectionalMap<Card, CardView> = BidirectionalMap()
@@ -106,7 +107,6 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
 
     init {
         background = ColorVisual(Color(195, 244, 198))
-        opacity = 0.91
 
         addComponents(
             drawStack,
@@ -115,7 +115,7 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
             pyramid,
             player1Label,
             player2Label,
-            endButton,
+            //endButton,
             note
         )
         player1Label.font = styleCurrent
@@ -360,82 +360,25 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
      * @param isValid was valid and cards were removed,
      * it removes the [CardView] of the cards from the GUI and the map. If not - it shows an animated notification informing
      * the player that he/she must try again. In any case it refreshes the chosen cards and unlocks all the buttons, so
-     * the player can choose another activity like "pass" or "reveal card".
+     * the player can choose another activity like "pass" or "reveal card" (method refreshAfterTurn())
      */
     override fun refreshAfterRemovePair(isValid: Boolean) {
 
         //if cards were removed, the corresponding views must be identified (pyramid/reserve stack) and removed
         if (isValid) {
 
-            //if card1 was from reserve stack and card2 from pyramid
-            if (!reserveStack.isEmpty() && card1 == reserveStack.components.last())
-            {
-                val card3 = reserveStack.pop()
-                cardMap.removeBackward(card3)
-
-                //find a cardView in the pyramid and delete it
-                var isRemoved = false
-
-                for (i in 0..6) {
-
-                    if (isRemoved) {
-                        card2?.let { cardMap.removeBackward(it) }
-                        break
+            val card1 = card1
+            val card2 = card2
+            lock()
+            playAnimation(DelayAnimation(250).apply {
+                onFinished = {
+                    card1?.let{first->
+                        card2?.let{ second -> removeSelectedCardViews(first,second)}
                     }
-
-                    val row = pyramid.get(0, i)
-                    isRemoved = card2?.let { row!!.remove(it) } == true
-
-
+                    refreshAfterTurn()
+                    unlock()
                 }
-
-
-            }
-            //if card2 was from reserve stack and card1 from pyramid
-            else if (!reserveStack.isEmpty() && card2 == reserveStack.components.last())
-            {
-                val card3 = reserveStack.pop()
-                cardMap.removeBackward(card3)
-
-                var isRemoved = false
-
-                for (i in 0..6) {
-
-                    if (isRemoved) {
-                        card1?.let { cardMap.removeBackward(it) }
-                        break
-                    }
-                    val row = pyramid.get(0, i)
-                    isRemoved = card1?.let { row!!.remove(it) } == true
-
-                }
-
-            } else { //both cards were from the pyramid
-
-                var b1 = false
-                var b2 = false
-
-                for (i in 0..6) {
-
-                    if (b1 && b2) {
-                        card2?.let { cardMap.removeBackward(it) }
-                        card1?.let { cardMap.removeBackward(it) }
-                        break
-                    }
-                    val row = pyramid.get(0, i)
-                    if (!b1) {
-                        b1 = card1?.let { row!!.remove(it) } == true
-                    }
-
-                    if (!b2) {
-                        b2 = card2?.let { row!!.remove(it) } == true
-                    }
-
-                }
-
-
-            }
-            refreshAfterFlipCard()
+            })
         }
 
         //if card choice invalid - try again
@@ -444,16 +387,99 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
             note.isVisible = true
             lock()
             playAnimation(
-                DelayAnimation(duration = 1000).apply {
+                DelayAnimation(duration = 250).apply {
                     onFinished = {
                         note.isVisible = false
+                        refreshAfterTurn()
                         unlock()
                     }
                 })
         }
 
-        refreshAfterTurn()
     }
+
+    /**
+     * This method finds the corresponding to card1 and card2 cardViews in the pyramid and/or reserve stack
+     * and removes it from the View. After that it calls method refreshAfterFlipCard() to adjust the pyramid view
+     * @param card1 is the first card view to be removed
+     * @param card2 is the first second view to be removed
+     */
+    private fun removeSelectedCardViews(card1 : CardView?, card2 : CardView?)
+    {
+        if (!reserveStack.isEmpty() && card1 == reserveStack.components.last())
+        {
+            val card3 = reserveStack.pop()
+            cardMap.removeBackward(card3)
+
+            //find a cardView in the pyramid and delete it
+            var isRemoved = false
+
+            for (i in 0..6) {
+
+                if (isRemoved) {
+                    card2?.let { cardMap.removeBackward(it) }
+                    break
+                }
+
+                val row = pyramid.get(0, i)
+                isRemoved = card2?.let { row!!.remove(it) } == true
+
+
+            }
+
+
+        }
+        //if card2 was from reserve stack and card1 from pyramid
+        else if (!reserveStack.isEmpty() && card2 == reserveStack.components.last())
+        {
+            val card3 = reserveStack.pop()
+            cardMap.removeBackward(card3)
+
+            var isRemoved = false
+
+            for (i in 0..6) {
+
+                if (isRemoved) {
+                    card1?.let { cardMap.removeBackward(it) }
+                    break
+                }
+                val row = pyramid.get(0, i)
+                isRemoved = card1?.let { row!!.remove(it) } == true
+
+            }
+
+        }
+        else
+        { //both cards were from the pyramid
+
+            var b1 = false
+            var b2 = false
+
+            for (i in 0..6) {
+
+                if (b1 && b2) {
+                    card2?.let { cardMap.removeBackward(it) }
+                    card1?.let { cardMap.removeBackward(it) }
+                    break
+                }
+                val row = pyramid.get(0, i)
+                if (!b1) {
+                    b1 = card1?.let { row!!.remove(it) } == true
+                }
+
+                if (!b2) {
+                    b2 = card2?.let { row!!.remove(it) } == true
+                }
+
+            }
+
+
+        }
+        //adjust the pyramid since the cards were removed - flip cards
+        refreshAfterFlipCard()
+    }
+
+
 
     /**
      * This method refreshes the Visual of chosen cards and unlocks all the buttons for the next turn

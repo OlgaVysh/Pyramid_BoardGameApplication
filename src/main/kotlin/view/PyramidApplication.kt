@@ -31,11 +31,7 @@ class PyramidApplication : BoardGameApplication("Pyramide"), Refreshable {
     }
 
     //this is the te actual game takes place
-    private val gameScene = GameTableScene(rootService).apply {
-        endButton.onMouseClicked = {
-            exit()
-        }
-    }
+    private val gameScene = GameTableScene(rootService)
 
     // This menu scene is shown after each finished game
     private val gameFinishedMenuScene = GameFinishedMenuScene(rootService).apply {
