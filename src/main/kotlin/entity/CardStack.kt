@@ -1,5 +1,4 @@
 package entity
-import kotlin.random.Random
 /**
  * Data structure that holds [Card] objects and provides stack-like access to them.
  * @param cards is a list of Cards to be put on the stack

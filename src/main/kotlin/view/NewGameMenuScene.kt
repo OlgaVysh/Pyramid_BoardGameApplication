@@ -9,7 +9,7 @@ import tools.aqua.bgw.visual.ColorVisual
 import java.awt.Color
 
 /**
- * [MenuScene] that is used for starting a new game. It is displayed directly at program start or reached
+ * [MenuScene] that is used for starting a new game. It is displayed directly at program start after the screensaver or reached
  * when "new game" is clicked in [GameFinishedMenuScene]. After providing the names of both players,
  * [startButton] can be pressed. There is also a [quitButton] to end the program.
  */

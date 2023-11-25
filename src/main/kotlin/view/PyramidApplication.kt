@@ -19,9 +19,10 @@ class PyramidApplication : BoardGameApplication("Pyramide"), Refreshable {
 
     //scenes
 
-    private val startScene = StartScene(this)
+    //Screensaver for the game
+    private val startScene = StartScene()
 
-    // This menu scene is shown after application start and if the "new game" button
+    // This menu scene is shown after application start and screensaver and if the "new game" button
     // is clicked in the gameFinishedMenuScene
        private val newGameMenuScene = NewGameMenuScene(rootService).apply {
         quitButton.onMouseClicked = {

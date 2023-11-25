@@ -133,8 +133,8 @@ class GameService (private val rootService: RootService) : AbstractRefreshingSer
     {
         val card1Value = card1.cardValue
         val card2Value = card2.cardValue
-        if ( (CardValue.ACE == card1Value).xor(card2Value == CardValue.ACE)) return 1
-        else return 2
+        return if ( (CardValue.ACE == card1Value).xor(card2Value == CardValue.ACE)) 1
+        else 2
     }
 
     /**

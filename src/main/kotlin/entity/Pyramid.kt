@@ -4,7 +4,6 @@ package entity
  *  @property cards is a list of 7 mutable lists of cards, each of them represents a row of a pyramid :
  *  first mutable list represents the first row and contains exactly one card
  *  second mutable list represents the second row and contains exactly two cards
- *  ...
  */
 class Pyramid (var cards : List<MutableList<Card>>) {
 

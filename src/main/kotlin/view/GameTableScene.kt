@@ -22,8 +22,7 @@ import java.awt.Color
  * reveals it and puts it on the reserve stack. The goal is to remove two cards ba clicking it:
  * one card from the pyramid and the top one from the reserve stack or two cards from the pyramid.
  * Only revealed cards of the pyramid are clickable and can be removed.
- * There are two buttons : [passButton] to pass a turn to another player and [endButton] to immediately terminate the game
- * without revealing the points and the winner.
+ * There is a [passButton] to pass a turn to another player.
  */
 
 class GameTableScene (private val rootService: RootService) : BoardGameScene(1920, 1080), Refreshable {
@@ -387,7 +386,7 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
             note.isVisible = true
             lock()
             playAnimation(
-                DelayAnimation(duration = 250).apply {
+                DelayAnimation(duration = 500).apply {
                     onFinished = {
                         note.isVisible = false
                         refreshAfterTurn()
