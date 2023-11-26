@@ -36,6 +36,9 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
         }
     }
 
+    //these are styles for the current player(highlighted) and the other one
+    private val styleCurrent = Font(40, Color.BLACK, "Arial", Font.FontWeight.BOLD, Font.FontStyle.NORMAL)
+    private val styleWait = Font(30, Color.BLACK, "Arial", Font.FontWeight.NORMAL, Font.FontStyle.NORMAL)
 
     val pyramid = PyramidView(480, 540)
 
@@ -80,6 +83,24 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
         text = "Player 2: ",
     )
 
+    private var player1Score: Label = Label(
+        height = 48,
+        width = 407,
+        posX = 909,
+        posY = 124,
+        text = "0",
+        font = styleWait
+    )
+
+    private var player2Score: Label = Label(
+        height = 48,
+        width = 407,
+        posX = 1455,
+        posY = 124,
+        text = "0",
+        font = styleWait
+    )
+
  //this is a notification shown in an animation
  private var note: Label = Label(
         height = 400,
@@ -96,9 +117,6 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
 
     val cardMap: BidirectionalMap<Card, CardView> = BidirectionalMap()
 
-    //these are styles for the current player(highlighted) and the other one
-    private val styleCurrent = Font(40, Color.BLACK, "Arial", Font.FontWeight.BOLD, Font.FontStyle.NORMAL)
-    private val styleWait = Font(30, Color.BLACK, "Arial", Font.FontWeight.NORMAL, Font.FontStyle.NORMAL)
 
     //these variables hold the cards to be evaluated to be removed
     private var card1: CardView? = null
@@ -115,7 +133,9 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
             player1Label,
             player2Label,
             //endButton,
-            note
+            note,
+            player1Score,
+            player2Score
         )
         player1Label.font = styleCurrent
         player2Label.font = styleWait
@@ -375,6 +395,9 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
                         card2?.let{ second -> removeSelectedCardViews(first,second)}
                     }
                     refreshAfterTurn()
+                    //update the score View
+                    player1Score.text = rootService.currentGame!!.players[0].score.toString()
+                    player2Score.text = rootService.currentGame!!.players[1].score.toString()
                     unlock()
                 }
             })
