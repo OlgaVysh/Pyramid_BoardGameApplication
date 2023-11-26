@@ -5,6 +5,7 @@ import entity.*
 /**
  * Service layer class that provides the logic for the two possible actions a player
  * can take in the game: pass, reveal card from a draw stack or remove two cards.
+ * @param [rootService] is an object of the Main class of the service layer for the War card game
  */
 
 class PlayerActionService (private val rootService: RootService) : AbstractRefreshingService(){

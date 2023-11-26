@@ -42,6 +42,7 @@ class Pyramid (var cards : List<MutableList<Card>>) {
         require(row7.size==7){"The seventh row of pyramid should contain 7 cards"}
 
 
+        //flip the cards on the edge of the pyramid
         cards.forEach{
 
                 it.first().isRevealed = true

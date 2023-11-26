@@ -12,18 +12,23 @@ import tools.aqua.bgw.animation.DelayAnimation
 
 class PyramidApplication : BoardGameApplication("Pyramide"), Refreshable {
 
-    // Central service from which all others are created/accessed
-    // also holds the currently active game
-
+    /**
+     * @property [rootService] is Central service from which all others are created/accessed
+     * also holds the currently active game
+     */
     private val rootService = RootService()
 
     //scenes
 
-    //Screensaver for the game
+    /**
+     * @property [startScene] holds a scene which holds a screensaver for the game
+     */
     private val startScene = StartScene()
 
-    // This menu scene is shown after application start and screensaver and if the "new game" button
-    // is clicked in the gameFinishedMenuScene
+    /**
+     * @property [newGameMenuScene] holds a menu scene which is shown after application start and screensaver and if the "new game" button
+     *   is clicked in the gameFinishedMenuScene
+     */
        private val newGameMenuScene = NewGameMenuScene(rootService).apply {
         quitButton.onMouseClicked = {
             exit()
@@ -31,10 +36,14 @@ class PyramidApplication : BoardGameApplication("Pyramide"), Refreshable {
 
     }
 
-    //this is the te actual game takes place
+    /**
+     * @property [gameScene] holds the scene where the actual game takes place
+     */
     private val gameScene = GameTableScene(rootService)
 
-    // This menu scene is shown after each finished game
+    /**
+     * @property [gameFinishedMenuScene] is a menu scene which is shown after each finished game
+     */
     private val gameFinishedMenuScene = GameFinishedMenuScene(rootService).apply {
         newGameButton.onMouseClicked = {
             showMenuScene(newGameMenuScene)
@@ -68,7 +77,10 @@ class PyramidApplication : BoardGameApplication("Pyramide"), Refreshable {
 
     }
 
-    //the new game menu scene is changed by game scene after player clicked "start"
+    /**
+     * This method is changing the new game menu scene by game scene after player clicked "start"
+     * and displays both players names
+     */
     override fun refreshAfterStartGame() {
         gameScene.player1Label.text = "Player 1: "+ rootService.currentGame!!.players[0].name
         gameScene.player2Label.text = "Player 2: "+rootService.currentGame!!.players[1].name
@@ -77,11 +89,13 @@ class PyramidApplication : BoardGameApplication("Pyramide"), Refreshable {
 
     }
 
-
+    /**
+     * This method refreshes the View after the Method endGame() in the Service layer.
+     * Before game is ended, players are notified with an animation,
+     * that the game ist ended. This happens in the game scene.
+     * After this animation the game finished scene is shown
+     */
     override fun refreshAfterEndGame() {
-        //before game is ended, players are notified with an animation,
-        //that the game ist ended. This happens in the game scene.
-        //After this animation the game finished scene is shown
         gameScene.lock()
         gameScene.playAnimation(
             DelayAnimation(duration = 1000).apply {

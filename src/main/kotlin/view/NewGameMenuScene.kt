@@ -16,6 +16,7 @@ import java.awt.Color
 
 class NewGameMenuScene (private val rootService: RootService) : MenuScene(1920, 1080), Refreshable {
 
+
     private val headlineLabel = Label(
         width = 937, height = 145, posX = 500, posY = 179,
         text = "Start New Game",
