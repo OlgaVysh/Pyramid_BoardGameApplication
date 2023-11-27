@@ -68,7 +68,7 @@ class PyramidApplication : BoardGameApplication("Pyramide"), Refreshable {
         // the new game scene
         this.showGameScene(startScene)
         CoroutineScope(Dispatchers.IO).launch {
-            delay(1000)
+            delay(1500)
             runOnGUIThread{
                 this@PyramidApplication.showMenuScene(newGameMenuScene,3000)
             }
