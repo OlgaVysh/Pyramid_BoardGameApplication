@@ -29,7 +29,7 @@ class PlayerServiceTest {
     }
 
     /**
-     * Tests methods Pass()
+     * Tests method pass()
      */
     @Test
     fun testPass()

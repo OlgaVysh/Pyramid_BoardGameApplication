@@ -71,7 +71,7 @@ fun testChangePlayer()
      * sum is 15 and one card is ace - returns true
      * sum is 15 without aces - returns true
      */
-    //Diese Methode funktioniert noch nicht daher einkommentiert
+
     @Test
     fun testCheckCardChoice()
     {
@@ -116,7 +116,7 @@ fun testChangePlayer()
    //Method flipCard() will be tested in class TestPlayerActionService as part from the method removePair()
 
     /**
-     * Tests method testCheckEmptyPyramid
+     * Tests method checkEmptyPyramid()
      * Creates a non-empty pyramid p and calls testCheckEmptyPyramid(p) - should return false
      * Clears all elements of p and calls testCheckEmptyPyramid(p) - should return true (p is empty)
      */
@@ -137,6 +137,12 @@ fun testChangePlayer()
         assertTrue(game.gameService.checkEmptyPyramid(p))
     }
 
+    /**
+     * Tests method setScore()
+     * Creates a valid pair of cards to be removed and checks, weather the score was set correctly:
+     * if one ACE returns 1
+     * if no ACE returns 2
+     */
     @Test
     fun testSetScore()
     {

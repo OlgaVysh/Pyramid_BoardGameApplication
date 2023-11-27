@@ -6,6 +6,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
+/**
+ * Test cases for the [Pyramid]
+ */
 class PyramidTest {
     //Karten für die entity.Pyramide werden erzeugt
 
@@ -24,6 +27,10 @@ class PyramidTest {
     var cardRow7 = mutableListOf(card1, card2, card1, card2, card1, card2, card1)
 
     //Hier werden die Fehlermeldungen des Konstruktors überprüft
+
+    /**
+     * Here the error messages of the constructor are checked
+     */
     @Test
     fun testPyramidSize()
     {
@@ -48,6 +55,9 @@ class PyramidTest {
         assertEquals("The seventh row of pyramid should contain 7 cards", last_row_exception.message)
     }
 
+    /**
+     * Tests s get() method
+     */
     @Test
     fun testGetter()
     {
@@ -55,6 +65,9 @@ class PyramidTest {
         assertEquals(listOf(cardRow1, cardRow2, cardRow3, cardRow4, cardRow5, cardRow6, cardRow7), newPyramid.cards)
     }
 
+    /**
+     * Tests s set() method
+     */
     @Test
     fun testSetter()
     {
@@ -65,6 +78,9 @@ class PyramidTest {
         assertEquals(listOf(cardRow1, cardRow2, cardRow3, cardRow4, cardRow5, cardRow6, newCardRow7), newPyramid.cards)
     }
 
+    /**
+     * Tests weather cards on the edge of the pyramid are flipped after its creation
+     */
     @Test
     fun testRevealedCards()
     {

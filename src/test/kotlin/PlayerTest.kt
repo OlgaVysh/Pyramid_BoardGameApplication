@@ -2,28 +2,21 @@ import entity.Player
 import org.junit.jupiter.api.Test
 import kotlin.test.assertFailsWith
 
+/**
+ * Test cases for the class [Player]
+ */
 class PlayerTest {
 
-    @Test //Testet, ob beim Erzeugen eines Players mit leerem Namen ein Fehler gemeldet wird
+    /**
+     * Tests whether an error is reported when creating a player with an empty name
+     */
+    @Test
     fun testEmptyName()
     {
 
         assertFailsWith<IllegalArgumentException>(
             block={ Player("") }
         )
-
-    }
-
-
-
-    //Testet, dass dem entity.Player kein negativer Score übergeben werden darf
-    @Test
-    fun testSetter()
-    {
-        //assertFailsWith<IllegalArgumentException>(
-          //  block={
-            //    Player("Timm").set(-10)
-            //})
 
     }
 }

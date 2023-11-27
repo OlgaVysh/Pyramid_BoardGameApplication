@@ -4,9 +4,13 @@ import entity.CardSuit
 import entity.CardValue
 import org.junit.jupiter.api.Assertions.assertNotSame
 import org.junit.jupiter.api.Assertions.assertTrue
+import service.CardImageLoader
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
+/**
+ * Test cases for the dataclass [Card]
+ */
 class CardTest {
 
     //Da entity.Card eine data Klasse ist, werden hier neben dem Getter und Setter noch die vom Konstruktor
@@ -16,6 +20,9 @@ class CardTest {
     var card1 = Card(CardValue.TWO, CardSuit.HEARTS)
     var card2 = Card(CardValue.TWO, CardSuit.DIAMONDS)
 
+    /**
+     * Tests the get() method
+     */
     @Test
     fun testGetter()
     {
@@ -28,6 +35,9 @@ class CardTest {
         assertEquals(false, actual = card1.isRevealed)
     }
 
+    /**
+     * Tests the set() method
+     */
     @Test
     fun testSetter()
     {
@@ -37,12 +47,18 @@ class CardTest {
         assertEquals(true, actual = card3.isRevealed)
     }
 
+    /**
+     * Tests the equality of two cards
+     */
     @Test //Überprüfe das Vergleichen der Karten ( Ergebnis soll falsch sein )
     fun testEqual()
     {
     assertTrue(card1 != card2)
     }
 
+    /**
+     * Tests the toString() method
+     */
     @Test //Überprüfe die Methode toString()
     fun testToString()
     {
@@ -51,7 +67,10 @@ class CardTest {
         assertEquals(expected, result)
     }
 
-    @Test //Überprüfe die Methode copy()
+    /**
+     * Tests the copy() method
+     */
+    @Test
     fun testCopy()
     {
         val card1Copy= card1.copy() //gleichwertige Kopie wird erstellt
@@ -62,6 +81,9 @@ class CardTest {
         assertTrue(card1 != card1AlteredCopy)
     }
 
+    /**
+     * Tests the hashCode() method
+     */
     @Test
     fun testHashcode() //Überprüfe die Methode hashCode()
     {

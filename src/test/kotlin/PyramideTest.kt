@@ -8,7 +8,9 @@ import entity.CardStack
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-
+/**
+ * Test cases for the [Pyramide]
+ */
 class PyramideTest {
 
     //Karten für die entity.Pyramide werden erzeugt
@@ -51,11 +53,15 @@ class PyramideTest {
     //Exceptions vom Konstruktor werden getestet
 
 
-    fun createDrawStack(cards: List<Card>):CardStack{
+    private fun createDrawStack(cards: List<Card>):CardStack{
         val stack = CardStack()
         stack.putOnTop(cards)
         return stack
     }
+
+    /**
+     * Tests whether an error is reported when creating a game with more than two players
+     */
     @Test
     fun testPlayers() //Mehr als 2 Spieler wurden übergeben
     {
@@ -68,6 +74,9 @@ class PyramideTest {
         assertEquals("invalid players count", exception.message)
     }
 
+    /**
+     * Tests whether an error is reported when creating a game with less than 52 cards
+     */
     @Test
     fun testCards() //Die Liste aus nur 2 Karten wurde übergeben
     {
@@ -79,7 +88,9 @@ class PyramideTest {
         assertEquals("invalid cards count", exception.message)
     }
 
-    //Getter wird getestet
+    /**
+     * Tests a get() method
+     */
 
     @Test
     fun testGetter()
@@ -96,8 +107,10 @@ class PyramideTest {
         assertEquals(newPyramid, pyramide.pyramid)
     }
 
-    //Setter wird getestet
 
+    /**
+     * Tests s set() method
+     */
     @Test
     fun testSetter()
     {

@@ -1,10 +1,11 @@
 import org.junit.jupiter.api.Test
 import entity.*
+import service.CardImageLoader
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
 import kotlin.test.assertSame
-import kotlin.random.Random
-
+/**
+ * Test cases for the [CardStack]
+ */
 
 class CardStackTest {
     private val c1 = Card(CardValue.ACE, CardSuit.SPADES)
@@ -34,19 +35,5 @@ class CardStackTest {
         assertEquals(stack.size, 3)
 
     }
-
-    /**
-     * Test if shuffle works
-     */
-
-
-    /**
-     * Test if drawing from an empty stack throws an exception
-     */
-
-
-
-
-
 
 }
