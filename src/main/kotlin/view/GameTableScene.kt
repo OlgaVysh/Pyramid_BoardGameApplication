@@ -83,7 +83,7 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
         text = "Player 2: ",
     )
 
-    private var player1Score: Label = Label(
+    var player1Score: Label = Label(
         height = 48,
         width = 407,
         posX = 909,
@@ -92,7 +92,7 @@ class GameTableScene (private val rootService: RootService) : BoardGameScene(192
         font = styleWait
     )
 
-    private var player2Score: Label = Label(
+    var player2Score: Label = Label(
         height = 48,
         width = 407,
         posX = 1455,

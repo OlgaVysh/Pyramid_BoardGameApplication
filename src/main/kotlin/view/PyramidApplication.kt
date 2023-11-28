@@ -84,6 +84,8 @@ class PyramidApplication : BoardGameApplication("Pyramide"), Refreshable {
     override fun refreshAfterStartGame() {
         gameScene.player1Label.text = "Player 1: "+ rootService.currentGame!!.players[0].name
         gameScene.player2Label.text = "Player 2: "+rootService.currentGame!!.players[1].name
+        gameScene.player1Score.text = "0"
+        gameScene.player1Score.text = "0"
         this.showGameScene(gameScene)
         this.hideMenuScene()
 
