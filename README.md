@@ -1,4 +1,4 @@
-# BoardGameWork "Pyramid"
+# BoardGameWork "Pyramid" Application
 
 ## Einleitung
 In diesem Einzelprojekt wurde das Brettspiel "Pyramide" implementiert.
