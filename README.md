@@ -41,75 +41,34 @@ Die Abläufe innerhalb der einzelnen Anwendungsfälle werden mittels Aktivitäts
 
 #### Aktivität "Passen"
 ![image](https://github.com/OlgaVysh/Pyramid_BoardGameApplication/assets/75023035/9630888c-50ec-4902-bb4a-0b92c8201367)
-Akteure: Spieler, Software
-Auslöser: Auslöser der Aktivität ist durch die Aktion Passen
-Vorbedingung: Spieler wählt kein Paar aus oder kann nicht passen.
-Nachbedingung: Spielerwechsel oder Beendingung  des Programms, wenn zwei Spieler direkt hintereinander gepasst haben.
+Akteure: Spieler, Software    
+Auslöser: Aktivität wird ausgelöst, indem Spieler "passen" gedrückt hat.    
+
 Standardablauf:
 
-Spieler wählt Aktion "Passen"
-Wird geschaut ob die Aktion gestattet wird
-Pass wird gestattet, wird geschaut ob Gegner schon gepasst hat
-Gegner hat nicht gepasst , Wechsel des Spielers
-Programmende
+Spieler wählt Aktion "Passen". Software überprüft, ob der Gegner davor schon gepasst hat. Ist das der Fall, wird die Aktivität "Spiel beenden" aufgerufen. Ist das nicht der Fall, wird es in der Variable opponentPassed gemerkt, dass dieser Spieler gepasst hat, indem sie auf 'true' gesetzt wird. Der Spieler wird gewechselt.
 
-Fehler: Bei invaliden Passzug soll eine Fehlermeldung ausgegeben werden und das Programm wird beendet.
-Alternativabläufe:
-Gegner hat schon gepasst
-
-Spieler wählt Aktion "Passen"
-Wird geschaut ob die Aktion gestattet wird
-Pass wird gestattet, wird geschaut ob Gegner schon gepasst hat
-Gegner hat gepasst , Spiel wird beendet
-Programmende
 
 #### Aktivität "Paar entfernen"
 ![image](https://github.com/OlgaVysh/Pyramid_BoardGameApplication/assets/75023035/6bd1ecec-79d4-4d64-9e35-47f4040dc629)
 Akteure: Spieler, Software
 Auslöser: Spieler wählt eine Karte aus.
-Vorbedingung: Spieler passt nicht, Spiel ist nicht beendet.
-Nachbedingung: Kartenpaar wird entfernt, Spieler gewechselt, Spiel eventuell beendet.
-Standardablauf:
-Spieler wählt Karte 1
-Software prüft Validität der Karte
-Spieler wählt Karte 2
-Software prüft Validität der Karte
-Software prüft Validität des Paars
-Karten werden entfernt
-Punkte werden gutgeschrieben
-Ende des Spiels wird überprüft und bei Bedarf entsprechende Methode aufgerufen
-Karten werden aufgedeckt
-Spieler wird gewechselt
-Fehler: Es wird kein valides Paar gebildet, Auswahl invalide
-Alternativabläufe:
-Invalides Paar:
-Spieler wählt valide Karten 1,2
-Software prüft ob Paar valide
-Software zeigt Fehlermeldung
-Spieler kann erneut wählen
 
-Invalide Auswahl:
-Spieler wählt invalide Karte
-Software zeigt Fehlermeldung
-Spieler kann erneut wählen
+Standardablauf:
+Spieler wählt erste Karte und Software prüft Validität der ersten Karte.    
+Spieler wählt zweite Karte und Software prüft Validität der zweiten Karte.  
+Software prüft Validität des Paars.  
+Hat das Paar die Überprüfung bestanden, werden die zwei ausgewählten Karten entfernt und Punkte werden dem aktuellen Spieler gutgeschrieben. Die Software überprüft, ob die Pyramide vollständig abgebaut ist. In dem Fall, wird die "Spiel beenden" Aktivität aufgerufen. Ist das nicht der Fall, werden die Karte am Rande der Pyramide umgedreht. Es wird gemerkt, dass der Spieler in diesem ZUg nicht gepasst hat. Spieler werden gewechselt.
+
+Falls Kartenauswahl nicht valide war, wird ein Fehler angezeigt und der Spieler wird aufgefordert, den Zug von vorne zu starten.
 
 #### Aktivität "Spiel beenden"
-![image](https://github.com/OlgaVysh/Pyramid_BoardGameApplication/assets/75023035/5593f925-21be-40b2-a941-21ce6bf71065)
+![image](https://github.com/OlgaVysh/Pyramid_BoardGameApplication/assets/75023035/5593f925-21be-40b2-a941-21ce6bf71065)  
 Akteure: Software
-Auslöser: Das Spiel endet mit einer von beiden Bedingungen und die Ergebnisse und der Gewinner wird angezeigt.
-Vorbedingung: Beide Spieler passen nicht, das Spiel endet nicht. Es gibt immer noch zu entfernende Paare.
-Nachbedingung: Das Spiel wird beendet
+Auslöser: Das Spiel endet, wenn die Pyramide vollständig abgebaut wurde oder wenn beide Spieler direkt nacheinander gepasst haben.
+
 Standardablauf:
--Spieler führt eine Aktion aus
--Software prüft, ob eine Bedingung erfüllt ist, die zum Ende des Spiels führt
--Software überprüft den Punktestand
--Software gibt Gewinner oder Unentschieden aus
--Software gibt Punktestand aus
--Software beendet Spiel
-Fehler: keine gültige Aktion
-Alternativabläufe:
--Bedingung nicht erfüllt
--Spiel geht weiter
+Wenn eine der Bedingungen vorliegt, wird der Punktenstand der Spieler aufgerufen. Die Punktenzahlen werden miteinander vergliechen. Gibt es einen Sieger, so wird sein Namen gemerkt. Ansonsten endet das Spiel mit "Unentschieden". Das Ergebnis des Spiels wird für die Spieler und die Zuschauer angezeigt. Das Spiel wird beendet. 
 
 ### Entity-Modell
 ![image](https://github.com/OlgaVysh/Pyramid_BoardGameApplication/assets/75023035/e93e0b54-cd37-488b-9969-4e9bbdd56309)
